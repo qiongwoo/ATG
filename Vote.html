@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Vote</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<style>
+    .container{
+        margin: 50px;        
+    }
+	.top-content{
+		font-size: 50px;
+		text-align:center;
+	}
+	.content{
+		text-align:center;					
+	}
+	.content-gender {
+		text-align:center;
+		font-size: 40px;	
+		font-weight: lighter;
+		color: white;
+		text-shadow:
+			-1px -1px 0 #D3D3D3,  
+			1px -1px 0 #D3D3D3,
+			-1px 1px 0 #D3D3D3,
+			1px 1px 0 #D3D3D3;
+	}
+	.content-percentage {
+		text-align:center;
+		font-size: 35px;
+		color: black;
+	}
+	.content-percentage-green {
+		text-align:center;
+		font-size: 35px;
+		color: green;		
+	}
+	.content-percentage-red {
+		text-align:center;
+		font-size: 35px;	
+		color: red;
+	}
+</style>
+<script type="text/javascript">
+	var femaleVote=0;
+	var maleVote=0;
+	function myOnload()
+	{						
+		if (typeof(window.Storage) !== "undefined") {
+			if(typeof(window.localStorage.getItem("Female"))=="undefined"){
+				window.localStorage.setItem("Female", 0);
+			}
+			else {
+				femaleVote=window.localStorage.getItem("Female");
+			}
+		
+			if(typeof(window.localStorage.getItem("Male"))=="undefined"){
+				window.localStorage.setItem("Male", 0);
+			}
+			else {
+				maleVote=window.localStorage.getItem("Male");
+			}
+		}else
+		{
+			alert("local storage not detected!");
+
+		}
+		
+		calculatePercentage();
+	}	
+	function btnFemaleClick()
+	{
+		document.getElementById("btnFemale").innerHTML="&#10003 Vote";
+		femaleVote++;
+		window.localStorage.setItem("Female", femaleVote);
+		calculatePercentage();
+	}
+	function btnMaleClick()
+	{
+		document.getElementById("btnMale").innerHTML="&#10003 Vote";
+		maleVote++;
+		window.localStorage.setItem("Male", maleVote);
+		calculatePercentage();
+	}
+	function calculatePercentage()
+	{
+		var total=0;
+		var femalePercentage;
+		
+		total=Number(femaleVote)+Number(maleVote);
+		if (total>0){
+			femalePercentage=(100.0* femaleVote/total).toFixed(0);
+			document.getElementById("female-percentage").innerHTML= femalePercentage+ "%";
+			document.getElementById("male-percentage").innerHTML= 100 - femalePercentage + "%";	
+			if(femalePercentage>100-femalePercentage)
+			{
+				document.getElementById("female-percentage").className = "content-percentage-green";
+				document.getElementById("male-percentage").className = "content-percentage-red";
+			}
+			else if(femalePercentage<100-femalePercentage)				
+			{
+				document.getElementById("female-percentage").className = "content-percentage-red";
+				document.getElementById("male-percentage").className = "content-percentage-green";
+			}
+			else {
+				document.getElementById("female-percentage").className = "content-percentage";
+				document.getElementById("male-percentage").className = "content-percentage";
+			}
+		}	
+	}
+</script>
+</head>
+<body onload="myOnload()">
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="top-content">I am ...</div>
+        </div>
+	</div>
+	<div class="row">		
+		<div class="col-md-3">
+			<div>
+				<div class="content-gender">FEMALE</div>
+				<div class="content">
+					<img src="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/svgs/fi-female.svg" class="img-fluid" alt="female">
+				</div>
+				<div id="female-percentage" class="content-percentage">0%</div>	
+				<div class="content">
+					<button id="btnFemale" type="button" class="btn btn-success" onclick="btnFemaleClick()" >Vote</button>					
+				</div>				
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div>
+				<div class="content-gender">MALE</div>
+				<div class="content">
+					<img src="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/svgs/fi-male.svg" class="img-fluid" alt="male">
+				</div>
+				<div id="male-percentage" class="content-percentage">0%</div>				
+				<div class="content">
+					<button id="btnMale" type="button" class="btn btn-success"  onclick="btnMaleClick()" >Vote</button>					
+				</div>				
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>                            
